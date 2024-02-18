@@ -2,12 +2,12 @@
 
 # compiled output
 # https://theapache64.github.io/git-do-not-ignore/
-!dist/
-dist/*
-!dist/apps/
-dist/apps/*
-!dist/apps/cf-page
-!dist/apps/node-vless
+# !dist/
+# dist/*
+# !dist/apps/
+# dist/apps/*
+# !dist/apps/cf-page
+# !dist/apps/node-vless
 
 tmp
 /out-tsc
