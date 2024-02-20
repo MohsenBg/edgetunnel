@@ -645,9 +645,9 @@ v35('v5', 0x50, sha1);
 async function serveClient(req, basePath) {
     const url = new URL(req.url);
     if (url.pathname.startsWith('/assets') || url.pathname.includes(basePath)) {
-        let targetUrl = `https://raw.githubusercontent.com/zizifn/edgetunnel/main/dist/apps/cf-page${url.pathname}`;
+        let targetUrl = `https://raw.githubusercontent.com/MohsenBg/edgetunnel/main/apps/cf-page-vless${url.pathname}`;
         if (url.pathname.includes(basePath)) {
-            targetUrl = `https://raw.githubusercontent.com/zizifn/edgetunnel/main/dist/apps/cf-page/index.html`;
+            targetUrl = `https://raw.githubusercontent.com/MohsenBg/edgetunnel/main/apps/cf-page-vless/public/401.html`;
         }
         console.log(targetUrl);
         const resp = await fetch(targetUrl);
@@ -846,7 +846,7 @@ if (!isVaildUser) {
 }
 const handler = async (req)=>{
     if (!isVaildUser) {
-        const index401 = await Deno.readFile(`${Deno.cwd()}/dist/apps/cf-page/401.html`);
+        const index401 = await Deno.readFile(`${Deno.cwd()}/apps/cf-page-vless/public/401.html`);
         return new Response(index401, {
             status: 401,
             headers: {

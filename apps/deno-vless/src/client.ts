@@ -1,33 +1,40 @@
 async function serveClient(req: Request, basePath: string) {
-  const url = new URL(req.url)
+  const url = new URL(req.url);
   if (url.pathname.startsWith('/assets') || url.pathname.includes(basePath)) {
     // const resp = await serveDir(req, {
     //   fsRoot: `${Deno.cwd()}/dist/apps/cf-page`,
     // });
     // resp.headers.set('cache-control', 'public, max-age=2592000');
     let targetUrl = `https://raw.githubusercontent.com/zizifn/edgetunnel/main/dist/apps/cf-page${url.pathname}`;
-    if(url.pathname.includes(basePath)){
-      targetUrl = `https://raw.githubusercontent.com/zizifn/edgetunnel/main/dist/apps/cf-page/index.html`;
+    if (url.pathname.includes(basePath)) {
+      targetUrl = `https://raw.githubusercontent.com/zizifn/edgetunnel/main/dist/apps/cf-page-vless/index.html`;
     }
-    console.log(targetUrl)
+
+    if (!targetUrl.includes('cf-page-vless'))
+      targetUrl = targetUrl.replace('cf-page', 'cf-page-vless');
+
+    targetUrl = targetUrl.replace('zizifn', 'MohsenBg');
+    console.log(targetUrl);
     const resp = await fetch(targetUrl);
     const modifiedHeaders = new Headers(resp.headers);
     modifiedHeaders.delete('content-security-policy');
-    if(url.pathname.endsWith('.js')){
+    if (url.pathname.endsWith('.js')) {
       modifiedHeaders.set('content-type', 'application/javascript');
-    }else if(url.pathname.endsWith('.css')){
+    } else if (url.pathname.endsWith('.css')) {
       modifiedHeaders.set('content-type', 'text/css');
-    }else if(url.pathname.includes(basePath)){
+    } else if (url.pathname.includes(basePath)) {
       modifiedHeaders.set('content-type', 'text/html; charset=utf-8');
-
     }
-    return new Response(
-      resp.body,
-      {
-        status: resp.status,
-        headers: modifiedHeaders
-      }
-    );
+
+    console.log({
+      status: resp.status,
+      headers: modifiedHeaders,
+    });
+
+    return new Response(resp.body, {
+      status: resp.status,
+      headers: modifiedHeaders,
+    });
   }
   const basicAuth = req.headers.get('Authorization') || '';
   const authString = basicAuth.split(' ')?.[1] || '';

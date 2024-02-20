@@ -15,9 +15,10 @@ if (!isVaildUser) {
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  // check UUID Provided env or not
   if (!isVaildUser) {
     const index401 = await Deno.readFile(
-      `${Deno.cwd()}/dist/apps/cf-page/401.html`
+      `${Deno.cwd()}/dist/apps/cf-page-vless/401.html`
     );
     return new Response(index401, {
       status: 401,
@@ -27,9 +28,12 @@ const handler = async (req: Request): Promise<Response> => {
     });
   }
   const upgrade = req.headers.get('upgrade') || '';
+
+  // check connection is websocket
   if (upgrade.toLowerCase() != 'websocket') {
     return await serveClient(req, userID);
   }
+
   const { socket, response } = Deno.upgradeWebSocket(req);
   socket.addEventListener('open', () => {});
 
